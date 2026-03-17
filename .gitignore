@@ -28,9 +28,12 @@ dist/
 build/
 out/
 
-# Sequelize CLI auto-generated folders (if you want to keep models in src)
-# models/
-# seeders/
-# migrations/
-# (Actually, keep migrations in git, but maybe not the root models folder if we use src/models)
-models/
+# Sequelize CLI auto-generated folders (ignore only root ones)
+/models/
+/seeders/
+/config/
+/migrations/
+# But keep src/models and src/config
+!src/models/
+!src/config/
+!migrations/
