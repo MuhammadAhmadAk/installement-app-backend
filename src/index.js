@@ -6,12 +6,17 @@ const { runMigrations } = require('./config/migrator');
 const authRoutes = require('./routes/authRoutes');
 const businessRoutes = require('./routes/businessRoutes');
 
+const path = require('path');
+
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve Static Files
+app.use('/public', express.static(path.join(__dirname, '../public')));
 
 // Database connection & Migrations
 const initializeApp = async () => {
@@ -31,7 +36,7 @@ app.get('/', (req, res) => {
 });
 
 // Port configuration
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
