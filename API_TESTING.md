@@ -23,6 +23,7 @@
   "success": true,
   "message": "Signup successful. Please check your email for verification.",
   "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "user": {
       "id": "550e8400-e29b-41d4-a716-446655440000",
       "name": "Ahmad Dev",
