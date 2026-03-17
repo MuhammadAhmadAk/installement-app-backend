@@ -221,14 +221,17 @@
   "success": true,
   "message": "Installment collected successfully.",
   "data": {
-    "id": "pay-uuid-001",
-    "productInstanceId": "prod-uuid-789",
-    "amountPaid": 8500,
-    "paymentDate": "2023-11-15T00:00:00.000Z",
-    "paymentMethod": "Cash",
-    "status": "Paid",
-    "createdAt": "2023-11-15T12:00:00.000Z",
-    "updatedAt": "2023-11-15T12:00:00.000Z"
+    "payment": {
+      "id": "pay-uuid-001",
+      "productInstanceId": "prod-uuid-789",
+      "amountPaid": 8500,
+      "paymentDate": "2023-11-15T00:00:00.000Z",
+      "paymentMethod": "Cash",
+      "status": "Paid"
+    },
+    "remainingBalance": "16500.00",
+    "totalPaid": "33500.00",
+    "isCompleted": false
   }
 }
 ```

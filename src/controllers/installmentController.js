@@ -64,11 +64,15 @@ exports.collectInstallment = async (req, res) => {
     const { customerId, productId, amountPaid, paymentDate, paymentMethod } = req.body;
 
     try {
-        const product = await ProductInstance.findByPk(productId);
+        const product = await ProductInstance.findByPk(productId, {
+            include: [{ model: InstallmentPayment, as: 'installmentHistory' }]
+        });
+
         if (!product) {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
 
+        // Create the payment record
         const payment = await InstallmentPayment.create({
             productInstanceId: productId,
             amountPaid,
@@ -77,11 +81,28 @@ exports.collectInstallment = async (req, res) => {
             status: 'Paid'
         });
 
+        // Calculate updated balance for this specific product
+        const totalToPay = parseFloat(product.totalSalePrice) - parseFloat(product.downPayment);
+        const totalPaidBeforeThis = product.installmentHistory.reduce((sum, pay) => sum + parseFloat(pay.amountPaid), 0);
+        const totalPaidNow = totalPaidBeforeThis + parseFloat(amountPaid);
+        const remainingBalance = totalToPay - totalPaidNow;
+
         res.json({
             success: true,
             message: "Installment collected successfully.",
-            data: payment
+            data: {
+                payment,
+                remainingBalance: remainingBalance.toFixed(2),
+                totalPaid: totalPaidNow.toFixed(2),
+                isCompleted: remainingBalance <= 0
+            }
         });
+
+        // If fully paid, mark product as inactive
+        if (remainingBalance <= 0) {
+            product.isActive = false;
+            await product.save();
+        }
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
